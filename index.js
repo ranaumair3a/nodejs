@@ -1,34 +1,9 @@
-const fs = require('fs');
 const http = require('http');
 const PDFParser = require('pdf-parse');
 const url = require('url');
 
 // Default port for the server
 const port = 3000;
-
-// Function to convert PDF to text
-async function convertPdfToTxt(pdfUrl) {
-  try {
-    // Read PDF file from URL
-    const pdfBuffer = await getPdfBuffer(pdfUrl);
-
-    // Parse PDF
-    const pdfData = await PDFParser(pdfBuffer);
-
-    // Extract text from PDF data
-    const text = pdfData.text;
-
-    // Write text to a new file
-    fs.writeFileSync('output.txt', text);
-
-    console.log('Conversion completed. Text saved to output.txt');
-
-    return text;
-  } catch (error) {
-    console.error('Error converting PDF to text:', error);
-    return null;
-  }
-}
 
 // Helper function to fetch PDF buffer from URL
 function getPdfBuffer(pdfUrl) {
@@ -49,6 +24,25 @@ function getPdfBuffer(pdfUrl) {
       reject(error);
     });
   });
+}
+
+// Function to convert PDF to text
+async function convertPdfToTxt(pdfUrl) {
+  try {
+    // Read PDF file from URL
+    const pdfBuffer = await getPdfBuffer(pdfUrl);
+
+    // Parse PDF
+    const pdfData = await PDFParser(pdfBuffer);
+
+    // Extract text from PDF data
+    const text = pdfData.text;
+
+    return text;
+  } catch (error) {
+    console.error('Error converting PDF to text:', error);
+    return null;
+  }
 }
 
 // Function to start HTTP server
